@@ -1,6 +1,6 @@
 class Api::V1::UsersController < ApplicationController
   before_action :set_user, only: [:show, :update, :destroy]
-  before_action :authenticate_user!, only: [:index]
+  before_action :authenticate_user!, only: [:index, :show, :destroy, :create]
 
   def index
     @users = User.all
@@ -15,7 +15,7 @@ class Api::V1::UsersController < ApplicationController
     @user = User.new(user_params)
 
     if @user.save
-      render json: @user, status: :created, location: @user
+      render json: @user, status: 201
     else
       render json: @user.errors, status: :unprocessable_entity
     end
@@ -28,10 +28,10 @@ class Api::V1::UsersController < ApplicationController
       render json: @user.errors, status: :unprocessable_entity
     end
   end
-
-  def destroy
-    @user.destroy
-  end
+  #
+  # def destroy
+  #   @user.destroy
+  # end
 
   private
     def set_user
