@@ -1,9 +1,10 @@
-class UsersController < ApplicationController
+class Api::V1::UsersController < ApplicationController
   before_action :set_user, only: [:show, :update, :destroy]
+  before_action :authenticate_user!, only: [:index]
 
   def index
     @users = User.all
-    render json: @users
+    render json: {status: 200, message: "YAY"}
   end
 
   def show
