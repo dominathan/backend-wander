@@ -2,6 +2,9 @@ class Api::V1::PlacesController < ApplicationController
   before_action :authenticate_user!
 
   def index
+    place_ids = Favorite.where(user_id: User.all).map(&:place_id)
+    @places = Place.where(id: place_ids)
+    render json: @places, status: 200
   end
 
   def create
