@@ -12,13 +12,11 @@ class Api::V1::UsersController < ApplicationController
   end
 
   def create
-    @user = User.new(user_params)
-
-    if @user.save
-      render json: @user, status: 201
-    else
-      render json: @user.errors, status: :unprocessable_entity
+    @user = User.find_or_initialize_by(email: user_params[:email])
+    if !@user.persisted?
+      @user.update_attributes(user_params)
     end
+    render json: @user, status: 201
   end
 
   def update
