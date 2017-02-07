@@ -1,19 +1,16 @@
 class Api::V1::PlacesController < ApplicationController
-  # before_action :authenticate_user!
+  before_action :authenticate_user!
 
   def index
   end
 
   def create
-    byebug
-
-    @place = Place.new(place_params)
-
-    if @place.save
-      render json: @user, status: 201
-    else
-      render json: @user.errors, status: :unprocessable_entity
+    @place = Place.find_or_initialize_by(google_id: place_params[:google_id])
+    if !@place.persisted?
+      @place.update_attributes(place_params)
     end
+    Favorite.create(user_id: User.find_by(email: params[:user][:email]).id, place_id: @place.id)
+    render json: @place, status: 201
   end
 
   private
