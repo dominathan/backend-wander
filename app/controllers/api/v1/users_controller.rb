@@ -26,10 +26,6 @@ class Api::V1::UsersController < ApplicationController
       render json: @user.errors, status: :unprocessable_entity
     end
   end
-  #
-  # def destroy
-  #   @user.destroy
-  # end
 
   private
     def set_user
