@@ -27,6 +27,11 @@ class Api::V1::UsersController < ApplicationController
     end
   end
 
+  def search
+    @users = User.find_friends(params[:name])
+    render json: @users.results, status: 200
+  end
+
   private
     def set_user
       @user = User.find(params[:id])

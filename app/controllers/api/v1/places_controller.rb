@@ -12,7 +12,7 @@ class Api::V1::PlacesController < ApplicationController
       @place.update_attributes(place_params)
     end
     comment = @place.comments.build(user_id: current_user.id, text: params[:comment])
-    comment.save
+    comment.save if params[:comment] && params[:comment].length > 0
     Favorite.create(user_id: current_user.id, place_id: @place.id) if params[:favorite]
     render json: @place, status: 201
   end
