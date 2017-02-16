@@ -8,6 +8,11 @@ class Api::V1::FriendsController < ApplicationController
   def create
     user = User.find_by(id: params[:id])
     @current_user.friend_request(user)
+    render json: { status: 201 }
+  end
+
+  def requested_friends
+    render json: @current_user.requested_friends
   end
 
   def accept

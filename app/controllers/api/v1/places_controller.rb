@@ -6,6 +6,10 @@ class Api::V1::PlacesController < ApplicationController
     render json: @places, status: 200
   end
 
+  def favorited_places
+    # @places = Place.joins(:favorite).order(;)
+  end
+
   def create
     @place = Place.find_or_initialize_by(google_id: place_params[:google_id])
     if !@place.persisted?
