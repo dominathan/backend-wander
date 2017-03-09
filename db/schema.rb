@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170216061017) do
+ActiveRecord::Schema.define(version: 20170309042507) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -45,6 +45,32 @@ ActiveRecord::Schema.define(version: 20170216061017) do
     t.index ["friend_id"], name: "friend_id_ix", using: :btree
   end
 
+  create_table "group_places", force: :cascade do |t|
+    t.integer  "group_id"
+    t.integer  "place_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["group_id"], name: "index_group_places_on_group_id", using: :btree
+    t.index ["place_id"], name: "index_group_places_on_place_id", using: :btree
+  end
+
+  create_table "group_users", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "group_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["group_id"], name: "index_group_users_on_group_id", using: :btree
+    t.index ["user_id"], name: "index_group_users_on_user_id", using: :btree
+  end
+
+  create_table "groups", force: :cascade do |t|
+    t.string   "name"
+    t.boolean  "private"
+    t.integer  "owner_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "places", force: :cascade do |t|
     t.string   "name"
     t.float    "lat"
@@ -75,4 +101,8 @@ ActiveRecord::Schema.define(version: 20170216061017) do
   add_foreign_key "comments", "users"
   add_foreign_key "favorites", "places"
   add_foreign_key "favorites", "users"
+  add_foreign_key "group_places", "groups"
+  add_foreign_key "group_places", "places"
+  add_foreign_key "group_users", "groups"
+  add_foreign_key "group_users", "users"
 end
