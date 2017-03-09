@@ -3,4 +3,7 @@ class Place < ApplicationRecord
   has_many :favorites
   has_many :comments
 
+  has_many :group_places
+  has_many :groups, through: :group_places
+
 end

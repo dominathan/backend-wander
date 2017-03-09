@@ -7,7 +7,8 @@ class User < ApplicationRecord
   has_many :comments
   has_many :favorites
   has_many :group_users
-
+  has_many :groups, through: :group_users
+  
   def self.find_friends(query)
     results = User.search(query, fields: [:first_name, :last_name], limit: 10, operator: 'or')
     return results
