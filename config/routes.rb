@@ -13,6 +13,7 @@ Rails.application.routes.draw do
       post 'friends/accept', to: 'friends#accept'
       get 'friends/requested', to: 'friends#requested_friends'
       get 'friends/pending', to: 'friends#pending_friends'
+      post 'groups', to: 'groups#create'
     end
   end
 end
