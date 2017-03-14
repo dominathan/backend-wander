@@ -15,9 +15,11 @@ class Api::V1::PlacesController < ApplicationController
     if !@place.persisted?
       @place.update_attributes(place_params)
     end
-    comment = @place.comments.build(user_id: current_user.id, text: params[:comment])
+    comment = @place.comments.build(user_id: current_user.id, text: params[:comment].try(:strip))
     comment.save if params[:comment] && params[:comment].length > 0
-    Favorite.create(user_id: current_user.id, place_id: @place.id) if params[:favorite]
+    if params[:favorite]
+      Favorite.create(user_id: current_user.id, place_id: @place.id) if params[:favorite]
+    end
     render json: @place, status: 201
   end
 
