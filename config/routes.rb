@@ -5,6 +5,7 @@ Rails.application.routes.draw do
       get '/users/search', to: 'users#search'
       resources :users
       resources :places
+      post 'places/user', to: 'places#user_places'
       get 'feed', to: "feeds#index"
       get 'feed/friends', to: 'feeds#feed_by_friends'
       get 'feed/experts', to: 'feeds#feed_by_experts'

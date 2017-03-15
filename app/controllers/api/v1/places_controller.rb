@@ -6,6 +6,12 @@ class Api::V1::PlacesController < ApplicationController
     render json: @places, status: 200
   end
 
+  def user_places
+    user = User.find_by(email: params['email'])
+    @user_object = { places: user.places, favorites: user.favorites.joins(:place).select('places.lat as lat, places.lng as lng, places.name as name, favorites.*') }
+    render json: @user_object, status: 200
+  end
+
   def favorited_places
     # @places = Place.joins(:favorite).order(;)
   end
@@ -15,8 +21,11 @@ class Api::V1::PlacesController < ApplicationController
     if !@place.persisted?
       @place.update_attributes(place_params)
     end
-    comment = @place.comments.build(user_id: current_user.id, text: params[:comment].try(:strip))
-    comment.save if params[:comment] && params[:comment].length > 0
+    @current_user.places.push(@place)
+    if params[:comment] && params[:comment].length > 0
+      comment = @place.comments.build(user_id: current_user.id, text: params[:comment].try(:strip))
+      comment.save
+    end
     if params[:favorite]
       Favorite.create(user_id: current_user.id, place_id: @place.id) if params[:favorite]
     end
@@ -25,7 +34,7 @@ class Api::V1::PlacesController < ApplicationController
 
   private
     def place_params
-      params.require(:place).permit(:name, :lat, :lng, :google_id, :google_place_id)
+      params.require(:place).permit(:name, :lat, :lng, :google_id, :google_place_id, :city, :country)
     end
 
 end
