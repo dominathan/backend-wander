@@ -16,6 +16,9 @@ Rails.application.routes.draw do
       post 'friends/decline', to: 'friends#decline'
       get 'friends/requested', to: 'friends#requested_friends'
       get 'friends/pending', to: 'friends#pending_friends'
+      get 'groups', to: 'groups#my_groups'
+      get 'groups/private', to: 'groups#private_groups'
+      get 'groups/public', to: 'groups#public_groups'
       post 'groups', to: 'groups#create'
     end
   end

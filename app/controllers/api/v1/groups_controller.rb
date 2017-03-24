@@ -2,12 +2,18 @@ class Api::V1::GroupsController < ApplicationController
   before_action :authenticate_user!
 
   def my_groups
+    @groups = @current_user.groups
+    render json: @groups, status: 201
   end
 
   def public_groups
+    @groups = Group.where(private: false).limit(10)
+    render json: @groups, status: 201
   end
 
   def private_groups
+    @groups = Group.where(private: true).limit(10)
+    render json: @groups, status: 201
   end
 
   def create
@@ -17,7 +23,7 @@ class Api::V1::GroupsController < ApplicationController
       render json: { status: 409, errors: group.errors.messages }
       return
     end
-    friend_ids =  params['friends'].map { |friend| friend['id'] }
+    friend_ids =  params['friends'].map { |friend| friend['id'] }.push(@current_user.id)
     group.users.push(User.where(id: friend_ids))
     render json: { status: 201 }
   rescue => e
