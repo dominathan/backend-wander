@@ -7,13 +7,18 @@ class Api::V1::PlacesController < ApplicationController
   end
 
   def user_places
-    user = User.find_by(email: params['email'])
+    user = User.find_by(email: params['email']) || @current_user
     @user_object = { places: user.places, favorites: user.favorites.joins(:place).select('places.lat as lat, places.lng as lng, places.name as name, favorites.*') }
     render json: @user_object, status: 200
   end
 
   def favorited_places
     # @places = Place.joins(:favorite).order(;)
+  end
+
+  def favorited_user_places
+    @user_object = { places: @current_user.places, favorites: @current_user.favorites.joins(:place).select('places.lat as lat, places.lng as lng, places.name as name, favorites.*') }
+    render json: @user_object, status: 200
   end
 
   def create

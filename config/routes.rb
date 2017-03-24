@@ -9,6 +9,7 @@ Rails.application.routes.draw do
       get 'feed', to: "feeds#index"
       get 'feed/friends', to: 'feeds#feed_by_friends'
       get 'feed/experts', to: 'feeds#feed_by_experts'
+      get 'feed/users', to: 'feeds#feed_by_user'
       get 'friends', to: 'friends#index'
       post 'friends', to: 'friends#create'
       post 'friends/accept', to: 'friends#accept'

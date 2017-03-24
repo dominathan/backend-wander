@@ -24,4 +24,11 @@ class Api::V1::FeedsController < ApplicationController
     render json: @commnets, status: 200
   end
 
+  def feed_by_user(user = @current_user)
+    @comments = Comment.where(user_id: user.id)
+       .order('created_at DESC').limit(10)
+       .map { |comment| {comment: comment.text, created_at: comment.created_at, user: comment.user, place: comment.place } }
+    render json: @commnets, status: 200
+  end
+
 end
