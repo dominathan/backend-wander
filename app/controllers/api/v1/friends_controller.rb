@@ -3,7 +3,7 @@ class Api::V1::FriendsController < ApplicationController
   before_action :get_user, only: [:create,:accept,:decline,:remove]
 
   def index
-    render json: @current_user.friends, status: 200
+    render json: @current_user.friends.order(:last_name), status: 200
   end
 
   def create
@@ -29,6 +29,7 @@ class Api::V1::FriendsController < ApplicationController
 
   def decline
     @current_user.decline_request(@user)
+    render json: { status: 201 }
   end
 
   def remove
