@@ -30,4 +30,22 @@ class Api::V1::GroupsController < ApplicationController
     render json: { status: 409, errors: e }
   end
 
+  def join_public_group
+    group_to_join = Group.find_by(name: params['name'])
+    if group_to_join.users.push(@current_user)
+      render json: { status: 201 }
+    else
+      render json: { status: 401 }
+    end
+  end
+
+  def search
+    @groups = Group.find_groups(params[:search])
+    render json: @groups.results, status: 200
+  end
+
+  def join_private_group
+
+  end
+
 end
