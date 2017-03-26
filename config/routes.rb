@@ -23,6 +23,8 @@ Rails.application.routes.draw do
       post 'groups/private', to: 'groups#join_private_group'
       post 'groups', to: 'groups#create'
       get 'groups/search', to: 'groups#search'
+      get 'groups/places', to: 'groups#group_places'
+      
     end
   end
 end

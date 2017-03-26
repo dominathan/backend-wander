@@ -23,23 +23,26 @@ class Api::V1::PlacesController < ApplicationController
 
   def create
     @place = Place.find_or_initialize_by(google_id: place_params[:google_id])
-    if !@place.persisted?
-      @place.update_attributes(place_params)
-    end
-    @current_user.places.push(@place)
+    @place.update_attributes(place_params) if !@place.persisted?
+    @current_user.places.push(@place) if !@current_user.places.include?(@place)
+
     if params[:comment] && params[:comment].length > 0
-      comment = @place.comments.build(user_id: current_user.id, text: params[:comment].try(:strip))
+      comment = @place.comments.build(user_id: @current_user.id, text: params[:comment].try(:strip))
       comment.save
     end
-    if params[:favorite]
-      Favorite.create(user_id: current_user.id, place_id: @place.id) if params[:favorite]
+    Favorite.create(user_id: @current_user.id, place_id: @place.id) if params[:favorite]
+    if params[:group]
+      group_to_add_place = Group.find_by(id: params[:group][:id])
+      group_to_add_place.places.push(@place) if !group_to_add_place.places.include?(@place)
     end
     render json: @place, status: 201
+  rescue => e
+    render json: { status: 500 }
   end
 
   private
     def place_params
-      params.require(:place).permit(:name, :lat, :lng, :google_id, :google_place_id, :city, :country)
+      params.require(:place).permit(:name, :lat, :lng, :google_id, :google_place_id, :city, :country, :group)
     end
 
 end

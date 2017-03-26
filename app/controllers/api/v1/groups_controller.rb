@@ -1,19 +1,17 @@
 class Api::V1::GroupsController < ApplicationController
   before_action :authenticate_user!
 
-  def my_groups
-    @groups = @current_user.groups
-    render json: @groups, status: 201
-  end
-
-  def public_groups
-    @groups = Group.where(private: false).limit(10)
-    render json: @groups, status: 201
-  end
-
-  def private_groups
-    @groups = Group.where(private: true).limit(10)
-    render json: @groups, status: 201
+  def group_places
+    group = Group.includes(:users, :places).find_by(name: params['groupName'])
+    if group
+      group_users = group.users
+      group_places = group.places
+      group_feed = Comment.where(user_id: group_users, place_id: group_places)
+                          .map { |comment| {comment: comment.text, created_at: comment.created_at, user: comment.user, place: comment.place } }
+      render json: { status: 200, places: group_places, feed: group_feed, users: group_users }
+    else
+      render json: { status: 404 }
+    end
   end
 
   def create
@@ -39,13 +37,28 @@ class Api::V1::GroupsController < ApplicationController
     end
   end
 
+  def join_private_group
+
+  end
+
+  def my_groups
+    @groups = @current_user.groups
+    render json: @groups, status: 201
+  end
+
+  def public_groups
+    @groups = Group.where(private: false).limit(10)
+    render json: @groups, status: 201
+  end
+
+  def private_groups
+    @groups = Group.where(private: true).limit(10)
+    render json: @groups, status: 201
+  end
+
   def search
     @groups = Group.find_groups(params[:search])
     render json: @groups.results, status: 200
-  end
-
-  def join_private_group
-
   end
 
 end
