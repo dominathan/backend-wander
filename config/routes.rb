@@ -24,7 +24,7 @@ Rails.application.routes.draw do
       post 'groups', to: 'groups#create'
       get 'groups/search', to: 'groups#search'
       get 'groups/places', to: 'groups#group_places'
-      
+      post 'groups/friends', to: 'groups#add_friends'
     end
   end
 end
