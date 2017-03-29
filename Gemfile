@@ -14,6 +14,7 @@ gem 'dotenv-rails', require: 'dotenv/rails-now', group: [:development, :test]
 gem 'jwt'
 gem 'has_friendship'
 gem 'searchkick'
+gem 'rails_12factor'
 
 
 gem 'rack-cors', :require => 'rack/cors'
