@@ -9,4 +9,7 @@ class Place < ApplicationRecord
   has_many :group_places
   has_many :groups, through: :group_places
 
+  has_many :images
+
+
 end

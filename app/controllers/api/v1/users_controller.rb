@@ -15,8 +15,10 @@ class Api::V1::UsersController < ApplicationController
     @user = User.find_or_initialize_by(email: user_params[:email])
     if !@user.persisted?
       @user.update_attributes(user_params)
+      render json: { user: @user, first_time: true, status: 201 }
+    else
+      render json: { user: @user, first_time: false, status: 201 }
     end
-    render json: @user, status: 201
   end
 
   def update
