@@ -17,6 +17,7 @@ gem 'searchkick'
 gem 'rails_12factor'
 gem 'aws-sdk', '~> 2'
 gem 'paperclip'
+gem 'geocoder'
 
 gem 'rack-cors', :require => 'rack/cors'
 

@@ -13,4 +13,8 @@ class Group < ApplicationRecord
     return results
   end
 
+  def owner
+    User.find(owner_id) rescue nil
+  end
+
 end

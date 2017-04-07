@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  get 'notifications/index'
+
   namespace :api,  defaults: { format: :json } do
     namespace :v1 do
       get '/users/search', to: 'users#search'
@@ -25,6 +27,9 @@ Rails.application.routes.draw do
       get 'groups/search', to: 'groups#search'
       get 'groups/places', to: 'groups#group_places'
       post 'groups/friends', to: 'groups#add_friends'
+      post 'groups/accept', to: 'groups#accept_join_private_group'
+
+      get 'notifications', to: 'notifications#index'
     end
   end
 end

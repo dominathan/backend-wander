@@ -2,8 +2,8 @@ class Api::V1::GroupsController < ApplicationController
   before_action :authenticate_user!
 
   def group_places
-    group = Group.includes(:users, :places).find_by(name: params['groupName'])
-    if group
+    group_and_places = Group.includes(:users, :places).find_by(name: params['groupName'])
+    if group_and_places
       group_users = group.users
       group_places = group.places
       group_feed = Comment.where(user_id: group_users, place_id: group_places)
@@ -37,8 +37,22 @@ class Api::V1::GroupsController < ApplicationController
     end
   end
 
-  def join_private_group
+  def request_join_private_group
+    group_to_join = Group.find_by(name: params['name'])
+    if group_to_join.group_users.create(user_id: @current_user.id, pending: true, accepted: false)
+      render json: { status: 201, message: "Request to join #{@group_to_join.name} sent." }
+    else
+      render json: { status: 404, message: "Request failed" }
+    end
+  end
 
+  def accept_join_private_group
+    group_to_accept_user = Group.find_by(id: params[:group_id])
+    if group_to_accept_user.group_users.where(user_id: params[:user_id]).update_all({ pending: false, accepted: true })
+      render json: { status: 201, message: "Accepted." }
+    else
+      render json: { status: 404, message: "Failed to join #{group_to_accept_user.name}."}
+    end
   end
 
   def my_groups
@@ -47,12 +61,12 @@ class Api::V1::GroupsController < ApplicationController
   end
 
   def public_groups
-    @groups = Group.where(private: false).limit(10).map { |x| { group: x, users: x.users } }
+    @groups = Group.where(private: false).limit(10).map { |group_name| { group: group_name, users: group_name.users } }
     render json: @groups, status: 201
   end
 
   def private_groups
-    @groups = Group.where(private: true).limit(10).map { |x| { group: x, users: x.users } }
+    @groups = Group.where(private: true).limit(10).map { |group_name| { group: group_name, users: group_name.users } }
     render json: @groups, status: 201
   end
 
