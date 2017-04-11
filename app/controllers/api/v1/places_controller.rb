@@ -62,6 +62,12 @@ class Api::V1::PlacesController < ApplicationController
     render json: { status: 500 }
   end
 
+  def filter_by_types
+    lat, lng, distance, type = params[:lat], params[:lng], params[:distance], params[:type]
+    @places = Place.nearby(lat,lng,distance).types(type)
+    render json: @places, status: 200
+  end
+
   private
     def place_params
       params.require(:place).permit(:name, :lat, :lng, :google_id, :google_place_id, :city, :country, :favorite, :group, :image => [:avatar], data: permit_recursive_params(params[:place][:data]))

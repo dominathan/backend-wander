@@ -5,9 +5,11 @@ Rails.application.routes.draw do
   namespace :api,  defaults: { format: :json } do
     namespace :v1 do
       get '/users/search', to: 'users#search'
+      post 'places/user', to: 'places#user_places'
+      get 'places/types', to: 'places#filter_by_types'
       resources :users
       resources :places
-      post 'places/user', to: 'places#user_places'
+
       get 'feed', to: "feeds#index"
       get 'feed/friends', to: 'feeds#feed_by_friends'
       get 'feed/experts', to: 'feeds#feed_by_experts'
