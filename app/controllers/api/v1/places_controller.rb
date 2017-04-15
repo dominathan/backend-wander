@@ -14,7 +14,7 @@ class Api::V1::PlacesController < ApplicationController
 
   def show
     @place = Place.find(params[:id])
-    render json: {status: 200, feed: @place.comments, place: @place, images: @place.images, favorites: @place.favorites }
+    render json: { feed: @place.comments, place: @place, images: @place.images, favorites: @place.favorites }, status: 200
   end
 
   def favorited_places
@@ -57,9 +57,9 @@ class Api::V1::PlacesController < ApplicationController
       @image.save
     end
     render json: @place, status: 201
-  rescue => e
-    puts "ERRROR #{e.inspect}"
-    render json: { status: 500 }
+  # rescue => e
+  #   puts "ERRROR #{e.inspect}"
+  #   render json: { status: 500 }
   end
 
   def filter_by_types

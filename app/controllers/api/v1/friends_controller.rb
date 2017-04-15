@@ -8,7 +8,7 @@ class Api::V1::FriendsController < ApplicationController
 
   def create
     @current_user.friend_request(@user)
-    render json: { status: 201 }
+    render json: { user: @user }, status: 201
   end
 
   def requested_friends
@@ -21,15 +21,15 @@ class Api::V1::FriendsController < ApplicationController
 
   def accept
     if @current_user.accept_request(@user)
-      render json: { status: 201 }
+      render json: { user: @user }, status: 201
     else
-      render json: { status: 404 }
+      render json: { user: @user }, status: 404
     end
   end
 
   def decline
     @current_user.decline_request(@user)
-    render json: { status: 201 }
+    render json: { user: @user }, status: 409
   end
 
   def remove

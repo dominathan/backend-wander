@@ -32,6 +32,8 @@ Rails.application.routes.draw do
       post 'groups/accept', to: 'groups#accept_join_private_group'
 
       get 'notifications', to: 'notifications#index'
+      post 'notifications/like', to: 'notifications#create_like'
+      get 'notifications/likes', to: 'notifications#likes_index' 
     end
   end
 end
