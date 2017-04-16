@@ -18,6 +18,8 @@ gem 'rails_12factor'
 gem 'aws-sdk', '~> 2'
 gem 'paperclip'
 gem 'geocoder'
+gem 'sidekiq'
+gem 'delayed_paperclip'
 
 gem 'rack-cors', :require => 'rack/cors'
 

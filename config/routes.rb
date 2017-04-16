@@ -33,7 +33,8 @@ Rails.application.routes.draw do
 
       get 'notifications', to: 'notifications#index'
       post 'notifications/like', to: 'notifications#create_like'
-      get 'notifications/likes', to: 'notifications#likes_index' 
+      get 'notifications/likes', to: 'notifications#likes_index'
+      post 'notifications/been_there', to: 'notifications#been_there'
     end
   end
 end
