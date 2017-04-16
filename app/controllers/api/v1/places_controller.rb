@@ -14,7 +14,7 @@ class Api::V1::PlacesController < ApplicationController
 
   def show
     @place = Place.find(params[:id])
-    render json: { feed: @place.comments.map { |x| x.attributes.merge({user: User.find(x.user_id).attributes}) }, place: @place, images: @place.images, favorites: @place.favorites }, status: 200
+    render json: { feed: @place.comments.map { |x| x.attributes.merge({user: User.find(x.user_id).attributes}) }, place: @place, images: @place.images, favorites: @place.favorites.map { |x| x.attributes.merge({user: User.find(x.user_id).attributes}) } }, status: 200
   end
 
   def favorited_places
