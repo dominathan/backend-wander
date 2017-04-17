@@ -6,6 +6,8 @@ Rails.application.routes.draw do
     namespace :v1 do
       get '/users/search', to: 'users#search'
       post 'places/user', to: 'places#user_places'
+      get 'places/experts', to: 'places#filter_by_expert'
+      get 'places/friends', to: 'places#filter_by_friends'
       get 'places/types', to: 'places#filter_by_types'
       resources :users
       resources :places

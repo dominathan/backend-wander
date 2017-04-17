@@ -21,6 +21,16 @@ class Api::V1::PlacesController < ApplicationController
     # @places = Place.joins(:favorite).order(;)
   end
 
+  def filter_by_expert
+    @places = User.where(expert: true).flat_map { |expert| expert.places }
+    render json: @places, status: 200
+  end
+
+  def filter_by_friends
+    @places = @current_user.friends.flat_map { |friend| friend.places }
+    render json: @places, status: 200
+  end
+
   def favorited_user_places
     @user_object = { places: @current_user.places, favorites: @current_user.favorites.joins(:place).select('places.lat as lat, places.lng as lng, places.name as name, favorites.*') }
     render json: @user_object, status: 200
