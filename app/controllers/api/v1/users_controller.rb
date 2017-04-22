@@ -17,7 +17,7 @@ class Api::V1::UsersController < ApplicationController
       @user.update_attributes(user_params)
       render json: { user: @user, first_time: true }, status: 201
     else
-      render json: { user: @user, first_time: false }, status: 201 
+      render json: { user: @user, first_time: false }, status: 201
     end
   end
 
@@ -40,6 +40,6 @@ class Api::V1::UsersController < ApplicationController
     end
 
     def user_params
-      params.require(:user).permit(:first_name, :last_name, :birthday, :photo_url, :email, :gender, :facebook_id, :refresh_token, :access_token, :id_token)
+      params.require(:user).permit(:first_name, :last_name, :birthday, :photo_url, :email, :gender, :facebook_id, :refresh_token, :access_token, :id_token, :expert_blog_log)
     end
 end
