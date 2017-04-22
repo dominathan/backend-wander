@@ -2,7 +2,7 @@ class Api::V1::FeedsController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    @comments = Comment.includes(:user, :place).order('created_at DESC').limit(10)
+    @comments = Comment.includes(:user, :place).order('created_at DESC').limit(100)
                       .map { |comment| {comment: comment.text, created_at: comment.created_at, user: comment.user, place: comment.place } }
     render json: @comments, status: 200
   end
