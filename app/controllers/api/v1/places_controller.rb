@@ -1,5 +1,7 @@
 class Api::V1::PlacesController < ApplicationController
-  before_action :authenticate_user!
+
+  # MAKE SURE TO VALIDATE IMAGES
+  before_action :authenticate_user!, except: [:images]
 
   def index
     @places = Place.all
@@ -14,7 +16,7 @@ class Api::V1::PlacesController < ApplicationController
 
   def show
     @place = Place.find(params[:id])
-    render json: { feed: @place.comments.map { |x| x.attributes.merge({user: User.find(x.user_id).attributes}) }, place: @place, images: @place.images, favorites: @place.favorites.map { |x| x.attributes.merge({user: User.find(x.user_id).attributes}) } }, status: 200
+    render json: { feed: @place.comments.map { |x| x.attributes.merge({user: User.find(x.user_id).attributes}) }, place: @place, images: @place.images.map { |img| {uri: img.s3_file_path}}, favorites: @place.favorites.map { |x| x.attributes.merge({user: User.find(x.user_id).attributes}) } }, status: 200
   end
 
   def favorited_places
@@ -60,16 +62,12 @@ class Api::V1::PlacesController < ApplicationController
       group_to_add_place = Group.find_by(id: params[:group][:id])
       group_to_add_place.places.push(@place) if !group_to_add_place.places.include?(@place)
     end
-
-    if params[:image]
-      @image = Image.new(place_id: @place.id, avatar: params[:image][:uri])
-      @image.avatar_file_name = SecureRandom.uuid
-      @image.save
-    end
     render json: @place, status: 201
-  # rescue => e
-  #   puts "ERRROR #{e.inspect}"
-  #   render json: { status: 500 }
+  end
+
+  def images
+    img = Image.new(avatar: params['photo'], place_id: Place.find_by(name: params['placename']).id)
+    img.save
   end
 
   def filter_by_types

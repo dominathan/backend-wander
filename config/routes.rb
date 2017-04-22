@@ -9,6 +9,7 @@ Rails.application.routes.draw do
       get 'places/experts', to: 'places#filter_by_expert'
       get 'places/friends', to: 'places#filter_by_friends'
       get 'places/types', to: 'places#filter_by_types'
+      post 'places/image', to: 'places#images'
       resources :users
       resources :places
 

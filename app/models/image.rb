@@ -5,13 +5,13 @@ class Image < ApplicationRecord
     styles: {
       original: '400x400#',
     },
-    default_style: :original,
-    path: "places/avatar/:hash/:style/:extension",
-    hash_data: ":id",
-    hash_secret: ENV['AWS_SECRET_ACCESS_KEY'],
-    hash_digest: 'SHA1'
+    default_style: :original
 
   do_not_validate_attachment_file_type :avatar
 
-
+  def s3_file_path
+    url = self.avatar.url.split('s3.')[1]
+    url.prepend('https://s3.us-east-2.')
+  end
+  
 end
