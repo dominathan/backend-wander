@@ -4,8 +4,8 @@ class Api::V1::GroupsController < ApplicationController
   def group_places
     group_and_places = Group.includes(:users, :places).find_by(name: params['groupName'])
     if group_and_places
-      group_users = group.users
-      group_places = group.places
+      group_users = group_and_places.users
+      group_places = group_and_places.places
       group_feed = Comment.where(user_id: group_users, place_id: group_places)
                           .map { |comment| {comment: comment.text, created_at: comment.created_at, user: comment.user, place: comment.place } }
       render json: { status: 200, places: group_places, feed: group_feed, users: group_users }
