@@ -16,13 +16,15 @@ Rails.application.routes.draw do
       get 'feed', to: "feeds#index"
       get 'feed/friends', to: 'feeds#feed_by_friends'
       get 'feed/experts', to: 'feeds#feed_by_experts'
-      get 'feed/users', to: 'feeds#feed_by_user'
+      get 'feed/users/:id', to: 'feeds#feed_by_user'
+
       get 'friends', to: 'friends#index'
       post 'friends', to: 'friends#create'
       post 'friends/accept', to: 'friends#accept'
       post 'friends/decline', to: 'friends#decline'
       get 'friends/requested', to: 'friends#requested_friends'
       get 'friends/pending', to: 'friends#pending_friends'
+
       get 'groups', to: 'groups#my_groups'
       get 'groups/private', to: 'groups#private_groups'
       get 'groups/public', to: 'groups#public_groups'

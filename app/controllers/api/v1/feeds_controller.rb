@@ -10,7 +10,7 @@ class Api::V1::FeedsController < ApplicationController
   def feed_by_friends
     @comments = Comment.includes(:user, :place)
        .where(user_id: @current_user.friends.map(&:id))
-       .order('created_at DESC').limit(10)
+       .order('created_at DESC').limit(100)
        .map { |comment| {comment: comment.text, created_at: comment.created_at, user: comment.user, place: comment.place } }
     render json: @comments, status: 200
   end
@@ -19,15 +19,20 @@ class Api::V1::FeedsController < ApplicationController
     experts = User.where(expert: true).map(&:id)
     @comments = Comment.includes(:user, :place)
        .where(user_id: experts)
-       .order('created_at DESC').limit(10)
+       .order('created_at DESC').limit(100)
        .map { |comment| {comment: comment.text, created_at: comment.created_at, user: comment.user, place: comment.place } }
     render json: @comments, status: 200
   end
 
   def feed_by_user
-    @comments = Comment.where(user_id: @current_user.id)
-       .order('created_at DESC').limit(10)
-       .map { |comment| {comment: comment.text, created_at: comment.created_at, user: comment.user, place: comment.place } }
+    if !params[:user_id]
+      @comments = Comment.where(user_id: @current_user.id)
+    else
+      @comments = Comment.where(user_id: User.find(params[:user_id]))
+    end
+
+    @comments.order('created_at DESC').limit(100)
+             .map { |comment| {comment: comment.text, created_at: comment.created_at, user: comment.user, place: comment.place } }
     render json: @comments, status: 200
   end
 
