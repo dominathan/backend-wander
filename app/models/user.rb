@@ -13,7 +13,7 @@ class User < ApplicationRecord
   has_many :places, through: :place_users
 
   def self.find_friends(query)
-    results = User.search(query, fields: [:first_name, :last_name], limit: 10, operator: 'or')
+    results = User.search(query, fields: [:first_name, :last_name, :email], limit: 10, operator: 'or')
     return results
   end
 
