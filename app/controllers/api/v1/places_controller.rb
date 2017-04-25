@@ -4,7 +4,9 @@ class Api::V1::PlacesController < ApplicationController
   before_action :authenticate_user!, except: [:images]
 
   def index
-    @places = Place.all.includes(:favorites).limit(100).map { |place| place.attributes.merge({favorites_count: place.favorites.count}) }.sort_by { |place| place[:favorites_count] }.reverse!
+    lat, lng, distance = params[:lat], params[:lng], params[:distance]
+    places = Place.nearby(lat,lng,distance)
+    @places = places.includes(:favorites).limit(100).map { |place| place.attributes.merge({favorites_count: place.favorites.count}) }.sort_by { |place| place[:favorites_count] }.reverse!
     render json: @places, status: 200
   end
 
