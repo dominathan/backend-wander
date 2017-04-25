@@ -61,12 +61,19 @@ class Api::V1::GroupsController < ApplicationController
   end
 
   def public_groups
-    @groups = Group.where(private: false).limit(10).map { |group_name| { group: group_name, users: group_name.users } }
+    @groups = Group.where(private: false)
+                   .limit(50)
+                   .map { |group_name| { group: group_name, users: group_name.users } }
+                   .reject { |group_name| group_name[:users].map { |user| user.id }.include?(@current_user.id) }
+
     render json: @groups, status: 201
   end
 
   def private_groups
-    @groups = Group.where(private: true).limit(10).map { |group_name| { group: group_name, users: group_name.users } }
+    @groups = Group.where(private: true)
+                   .limit(50)
+                   .map { |group_name| { group: group_name, users: group_name.users } }
+                   .reject { |group_name| group_name[:users].map { |user| user.id }.include?(@current_user.id) }
     render json: @groups, status: 201
   end
 
