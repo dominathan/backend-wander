@@ -14,9 +14,14 @@ class Place < ApplicationRecord
 
   #https://github.com/alexreisner/geocoder
   reverse_geocoded_by :lat, :lng
+  searchkick #https://github.com/ankane/searchkick
 
   scope :nearby, -> (lat, lng, distance) {  Place.near([lat,lng], distance) }
   scope :types, -> (type) { joins(:types).where('types.name = ?', type) }
 
+  def self.find_by_city_or_country(query)
+    results = Place.search(query, fields: [:city, :country], limit: 100, operator: 'or')
+    return results
+  end
 
 end

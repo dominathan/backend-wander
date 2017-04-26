@@ -21,10 +21,6 @@ class Api::V1::PlacesController < ApplicationController
     render json: { feed: @place.comments.map { |x| x.attributes.merge({user: User.find(x.user_id).attributes}) }, place: @place, images: @place.images.map { |img| {uri: img.s3_file_path}}, favorites: @place.favorites.map { |x| x.attributes.merge({user: User.find(x.user_id).attributes}) } }, status: 200
   end
 
-  def favorited_places
-    # @places = Place.joins(:favorite).order(;)
-  end
-
   def filter_by_expert
     @places = User.where(expert: true).flat_map { |expert| expert.places }
     render json: @places, status: 200
@@ -38,6 +34,16 @@ class Api::V1::PlacesController < ApplicationController
   def favorited_user_places
     @user_object = { places: @current_user.places, favorites: @current_user.favorites.joins(:place).select('places.lat as lat, places.lng as lng, places.name as name, favorites.*') }
     render json: @user_object, status: 200
+  end
+
+  def filter_by_city_or_country
+    places = Place.find_by_city_or_country(params['city_or_country'])
+    if places
+      @places = places.includes(:favorites).limit(100).map { |place| place.attributes.merge({favorites_count: place.favorites.count}) }.sort_by { |place| place[:favorites_count] }.reverse!
+      render json: @places, status: 200
+    else
+      render status: 404
+    end
   end
 
   def create
