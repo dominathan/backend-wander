@@ -17,7 +17,7 @@ class Place < ApplicationRecord
   searchkick #https://github.com/ankane/searchkick
 
   scope :nearby, -> (lat, lng, distance) {  Place.near([lat,lng], distance) }
-  scope :types, -> (type) { joins(:types).where('types.name = ?', type) }
+  scope :types, -> (type1,type2,type3,type4,type5) { joins(:types).where('types.name = ? OR types.name = ? OR types.name = ? OR types.name = ? OR types.name = ?', type1,type2,type3,type4,type5) }
 
   def self.find_by_city_or_country(query)
     results = Place.search(query, fields: [:city, :country], limit: 100, operator: 'or')
