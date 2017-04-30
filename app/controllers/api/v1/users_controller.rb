@@ -1,6 +1,6 @@
 class Api::V1::UsersController < ApplicationController
   before_action :set_user, only: [:show, :update, :destroy]
-  before_action :authenticate_user!, only: [:index, :show, :destroy, :create]
+  before_action :authenticate_user!, only: [:index, :show, :destroy, :create, :search]
 
   def index
     @users = User.all
@@ -31,7 +31,9 @@ class Api::V1::UsersController < ApplicationController
 
   def search
     @users = User.find_friends(params[:name])
-    render json: @users.results, status: 200
+    current_user_friend_ids = @current_user.friends.map(&:id)
+    @filter_users = @users.results.reject { |user| current_user_friend_ids.include?(user.id) }
+    render json: @filter_users, status: 200
   end
 
   private

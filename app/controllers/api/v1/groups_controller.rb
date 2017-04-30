@@ -91,7 +91,8 @@ class Api::V1::GroupsController < ApplicationController
 
   def search
     @groups = Group.find_groups(params[:search])
-    render json: @groups.results, status: 200
+    @groups = @groups.results.reject { |group| group.group_users.map { |gu| gu.user_id }.include?(@current_user.id) }
+    render json: @groups, status: 200
   end
 
 end
