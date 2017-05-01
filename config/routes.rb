@@ -10,7 +10,7 @@ Rails.application.routes.draw do
       get 'places/friends', to: 'places#filter_by_friends'
       get 'places/types', to: 'places#filter_by_types'
       post 'places/image', to: 'places#images'
-      get 'places/city_or_country', to: 'places#filter_by_city_or_country'
+      get 'places/search', to: 'places#filter_by_city_or_country'
       resources :users
       resources :places
 

@@ -40,7 +40,7 @@ class Api::V1::GroupsController < ApplicationController
   def request_join_private_group
     group_to_join = Group.find_by(name: params['name'])
     if group_to_join.group_users.create(user_id: @current_user.id, pending: true, accepted: false)
-      render json: { status: 201, message: "Request to join #{@group_to_join.name} sent." }
+      render json: { status: 201, message: "Request to join sent." }
     else
       render json: { status: 404, message: "Request failed" }
     end
