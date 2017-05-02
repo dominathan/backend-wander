@@ -18,7 +18,12 @@ class Api::V1::PlacesController < ApplicationController
 
   def show
     @place = Place.find(params[:id])
-    render json: { feed: @place.comments.map { |x| x.attributes.merge({user: User.find(x.user_id).attributes}) }, place: @place, images: @place.images.map { |img| {uri: img.s3_file_path}}, favorites: @place.favorites.map { |x| x.attributes.merge({user: User.find(x.user_id).attributes}) } }, status: 200
+    render json: {
+      feed: @place.comments.map { |comment| comment.attributes.merge({user: User.find(comment.user_id).attributes, comment: comment.text}) },
+      place: @place,
+      images: @place.images.map { |img| {uri: img.s3_file_path}},
+      favorites: @place.favorites.map { |favorite| favorite.attributes.merge({user: User.find(favorite.user_id).attributes}) }
+    }, status: 200
   end
 
   def filter_by_expert
