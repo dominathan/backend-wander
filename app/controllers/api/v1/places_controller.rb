@@ -57,8 +57,10 @@ class Api::V1::PlacesController < ApplicationController
       @place.update_attributes(place_params.slice(:name, :lat, :lng, :google_id, :google_place_id, :city, :country, :data))
 
       @place.data['types'].each do |type|
-        type_id = Type.find_by(name: type).id
-        @place.place_types.create(type_id: type_id)
+        type_id = Type.find_by(name: type).try(:id)
+        if type_id
+          @place.place_types.create(type_id: type_id)
+        end
       end
     end
 
