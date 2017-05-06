@@ -11,9 +11,10 @@ class Api::V1::FeedsController < ApplicationController
     render json: @comments, status: 200
   end
 
+  # alias as feed_by_following
   def feed_by_friends
     @comments = Comment.includes(:user, :place)
-       .where(user_id: @current_user.friends.map(&:id))
+       .where(user_id: (@current_user.friends.map(&:id) + @current_user.pending_friends.map(&:id)).uniq)
        .order('created_at DESC').limit(100)
        .map { |comment| {comment: comment.text, created_at: comment.created_at, user: comment.user, place: comment.place } }
     render json: @comments, status: 200

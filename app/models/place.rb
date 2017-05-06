@@ -16,7 +16,7 @@ class Place < ApplicationRecord
   reverse_geocoded_by :lat, :lng
   searchkick #https://github.com/ankane/searchkick
 
-  scope :nearby, -> (lat, lng, distance) {  Place.near([lat,lng], distance) }
+  scope :nearby, -> (lat, lng, distance = 20) {  Place.near([lat,lng], distance) }
   scope :types, -> (type1,type2,type3,type4,type5) { joins(:types).where('types.name = ? OR types.name = ? OR types.name = ? OR types.name = ? OR types.name = ?', type1,type2,type3,type4,type5) }
 
   def self.find_by_city_or_country(query)

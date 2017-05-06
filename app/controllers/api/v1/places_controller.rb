@@ -32,7 +32,7 @@ class Api::V1::PlacesController < ApplicationController
   end
 
   def filter_by_friends
-    @places = @current_user.friends.flat_map { |friend| friend.places }
+    @places = @current_user.friends.flat_map { |friend| friend.places } + @current_user.pending_friends.flat_map { |friend| friend.places }
     render json: @places, status: 200
   end
 
