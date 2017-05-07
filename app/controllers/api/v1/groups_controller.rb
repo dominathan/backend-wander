@@ -15,7 +15,7 @@ class Api::V1::GroupsController < ApplicationController
   end
 
   def create
-    group_to_create = Group.new(name: params['groupName'], owner_id: @current_user.id, private: params['private'])
+    group_to_create = Group.new(name: params['groupName'], owner_id: @current_user.id, private: params['private'], lat: params['lat'], lng: params['lng'], city: params['city'])
     group_to_create.save
     if !group_to_create.errors.messages.empty?
       render json: { status: 409, errors: group_to_create.errors.messages }
