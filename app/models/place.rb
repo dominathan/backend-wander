@@ -1,4 +1,6 @@
 class Place < ApplicationRecord
+  include PgSearch
+
   has_many :favorites
   has_many :comments
   has_many :place_users
@@ -14,14 +16,8 @@ class Place < ApplicationRecord
 
   #https://github.com/alexreisner/geocoder
   reverse_geocoded_by :lat, :lng
-  searchkick #https://github.com/ankane/searchkick
 
   scope :nearby, -> (lat, lng, distance = 20) {  Place.near([lat,lng], distance) }
   scope :types, -> (type1,type2,type3,type4,type5) { joins(:types).where('types.name = ? OR types.name = ? OR types.name = ? OR types.name = ? OR types.name = ?', type1,type2,type3,type4,type5) }
-
-  def self.find_by_city_or_country(query)
-    results = Place.search(query, fields: [:city, :country], limit: 100, operator: 'or')
-    return results
-  end
-
+  pg_search_scope :find_by_city_or_country, against: [:city, :country]
 end

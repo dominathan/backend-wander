@@ -1,17 +1,14 @@
 class Group < ApplicationRecord
-  validates_uniqueness_of :name
+  include PgSearch
 
-  searchkick #https://github.com/ankane/searchkick
+  validates_uniqueness_of :name
 
   has_many :group_users
   has_many :users, through: :group_users
   has_many :group_places
   has_many :places, through: :group_places
 
-  def self.find_groups(query)
-    results = Group.search(query, fields: [:name], limit: 10)
-    return results
-  end
+  pg_search_scope :find_groups, against: [:name]
 
   def owner
     User.find(owner_id) rescue nil

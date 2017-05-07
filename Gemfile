@@ -13,13 +13,14 @@ gem 'puma', '~> 3.0'
 gem 'dotenv-rails', require: 'dotenv/rails-now', group: [:development, :test]
 gem 'jwt'
 gem 'has_friendship'
-gem 'searchkick'
 gem 'rails_12factor'
 gem 'aws-sdk', '~> 2'
 gem 'paperclip'
 gem 'geocoder'
 gem 'sidekiq'
 gem 'delayed_paperclip'
+gem 'pg_search'
+
 
 gem 'rack-cors', :require => 'rack/cors'
 

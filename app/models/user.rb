@@ -1,8 +1,11 @@
 class User < ApplicationRecord
+  include PgSearch
+
   validates_uniqueness_of :email
 
   has_friendship # https://github.com/sungwoncho/has_friendship
-  searchkick #https://github.com/ankane/searchkick
+
+  pg_search_scope :find_friends, against: [:first_name, :last_name, :email]
 
   has_many :comments
   has_many :favorites
@@ -11,10 +14,5 @@ class User < ApplicationRecord
 
   has_many :place_users
   has_many :places, through: :place_users
-
-  def self.find_friends(query)
-    results = User.search(query, fields: [:first_name, :last_name, :email], limit: 10, operator: 'or')
-    return results
-  end
 
 end

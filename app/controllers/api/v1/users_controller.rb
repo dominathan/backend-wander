@@ -32,7 +32,7 @@ class Api::V1::UsersController < ApplicationController
   def search
     @users = User.find_friends(params[:name])
     current_user_friend_ids = @current_user.friends.map(&:id)
-    @filter_users = @users.results.reject { |user| current_user_friend_ids.include?(user.id) }
+    @filter_users = @users.reject { |user| current_user_friend_ids.include?(user.id) }
     render json: @filter_users, status: 200
   end
 
