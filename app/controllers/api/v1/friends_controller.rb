@@ -23,6 +23,15 @@ class Api::V1::FriendsController < ApplicationController
     render json: @current_user.pending_friends + @current_user.friends
   end
 
+  def requested_friends_of_user
+    user = User.find(params['user_id'])
+    if user
+      render json: user.requested_friends + user.friends, status: 200
+    else
+      render json: {}, status: 404
+    end
+  end
+
   # def accept
   #   if @current_user.accept_request(@user)
   #     render json: { user: @user }, status: 201
