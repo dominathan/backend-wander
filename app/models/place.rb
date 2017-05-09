@@ -20,4 +20,21 @@ class Place < ApplicationRecord
   scope :nearby, -> (lat, lng, distance = 20) {  Place.near([lat,lng], distance) }
   scope :types, -> (type1,type2,type3,type4,type5) { joins(:types).where('types.name = ? OR types.name = ? OR types.name = ? OR types.name = ? OR types.name = ?', type1,type2,type3,type4,type5) }
   pg_search_scope :find_by_city_or_country, against: [:city, :country]
+
+
+  def self.set_city_and_country
+    Place.all.each do |place|
+       country_test = place.data['address_components'].select { |item| item['types'].include?("country") }
+       city_test = place.data['address_components'].select { |item| item['types'].include?("locality") }
+       if country_test.any?
+         country = country_test.first['long_name']
+         place.update_attribute(:country, country)
+       end
+       if city_test.any?
+         city = city_test.first['long_name']
+         place.update_attribute(:city, city)
+       end
+     end
+  end
+
 end
