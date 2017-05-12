@@ -13,5 +13,5 @@ class Image < ApplicationRecord
     url = self.avatar.url.split('s3.')[1]
     url.prepend('https://s3.us-east-2.')
   end
-  
+
 end

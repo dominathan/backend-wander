@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170507182612) do
+ActiveRecord::Schema.define(version: 20170512164325) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -87,7 +87,9 @@ ActiveRecord::Schema.define(version: 20170507182612) do
     t.datetime "created_at",          null: false
     t.datetime "updated_at",          null: false
     t.integer  "place_id"
+    t.integer  "user_id"
     t.index ["place_id"], name: "index_images_on_place_id", using: :btree
+    t.index ["user_id"], name: "index_images_on_user_id", using: :btree
   end
 
   create_table "likes", force: :cascade do |t|
@@ -179,6 +181,7 @@ ActiveRecord::Schema.define(version: 20170507182612) do
   add_foreign_key "group_places", "places"
   add_foreign_key "group_users", "groups"
   add_foreign_key "group_users", "users"
+  add_foreign_key "images", "users"
   add_foreign_key "likes", "places"
   add_foreign_key "likes", "users"
   add_foreign_key "place_types", "places"

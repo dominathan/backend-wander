@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   namespace :api,  defaults: { format: :json } do
     namespace :v1 do
       get '/users/search', to: 'users#search'
+      post 'users/image', to: 'users#images'
       post 'places/user', to: 'places#user_places'
       get 'places/experts', to: 'places#filter_by_expert'
       get 'places/friends', to: 'places#filter_by_friends'

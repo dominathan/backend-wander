@@ -1,6 +1,6 @@
 class Api::V1::UsersController < ApplicationController
   before_action :set_user, only: [:show, :update, :destroy]
-  before_action :authenticate_user!, only: [:index, :show, :destroy, :create, :search]
+  before_action :authenticate_user!, only: [:index, :show, :destroy, :create, :search, :images]
 
   def index
     @users = User.all
@@ -34,6 +34,16 @@ class Api::V1::UsersController < ApplicationController
     current_user_friend_ids = @current_user.friends.map(&:id)
     @filter_users = @users.reject { |user| current_user_friend_ids.include?(user.id) }
     render json: @filter_users, status: 200
+  end
+
+  def images
+    img = Image.new(avatar: params['photo'], user_id: @current_user.id)
+    if img.save
+      @current_user.update_attribute(:photo_url, img.s3_file_path)
+      render json: @current_user, status: 201
+    else
+      render json: {}, status: 500
+    end
   end
 
   private

@@ -83,6 +83,7 @@ class Api::V1::PlacesController < ApplicationController
   def images
     img = Image.new(avatar: params['photo'], place_id: Place.find_by(name: params['placename']).id)
     img.save
+    render json: {}, status: 201
   end
 
   def filter_by_types

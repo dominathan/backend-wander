@@ -14,5 +14,6 @@ class User < ApplicationRecord
 
   has_many :place_users
   has_many :places, through: :place_users
+  has_many :images
 
 end
