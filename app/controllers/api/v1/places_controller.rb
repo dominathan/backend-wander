@@ -81,7 +81,7 @@ class Api::V1::PlacesController < ApplicationController
   end
 
   def images
-    img = Image.new(avatar: params['photo'], place_id: Place.find_by(name: params['placename']).id)
+    img = Image.new(avatar: params['photo'], place_id: params['placename'] ? Place.find_by(name: params['placename']).id : params['place_id'])
     img.save
     render json: {}, status: 201
   end
