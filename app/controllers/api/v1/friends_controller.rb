@@ -3,7 +3,7 @@ class Api::V1::FriendsController < ApplicationController
   before_action :get_user, only: [:create]
 
   def index
-    render json: @current_user.friends.order(:last_name), status: 200
+    render json: @current_user.friends + @current_user.requested_friends, status: 200
   end
 
   def create
