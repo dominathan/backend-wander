@@ -88,8 +88,7 @@ class Api::V1::PlacesController < ApplicationController
 
   def filter_by_types
     lat, lng, distance, type = params[:lat], params[:lng], params[:distance], params[:type]
-    type1,type2,type3,type4,type5 = type.split("||")
-    @places = Place.nearby(lat,lng,distance).types(type1,type2,type3,type4,type5)
+    @places = Place.nearby(lat,lng,distance).types(type)
     render json: @places, status: 200
   end
 
