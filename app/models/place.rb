@@ -18,7 +18,7 @@ class Place < ApplicationRecord
   reverse_geocoded_by :lat, :lng
 
   scope :nearby, -> (lat, lng, distance = 20) {  Place.near([lat,lng], distance) }
-  scope :types, -> (type) { joins(:types).where(type.split().map { |x| "types.name = '#{x}' OR"}.join(" ")[0..-4])}
+  scope :types, -> (type) { joins(:types).where(type.split(",").map { |x| "types.name = '#{x}' OR"}.join(" ")[0..-4])}
   pg_search_scope :find_by_city_or_country, against: [:city, :country]
 
 
