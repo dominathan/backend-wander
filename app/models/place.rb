@@ -19,8 +19,6 @@ class Place < ApplicationRecord
 
   scope :nearby, -> (lat, lng, distance = 20) {  Place.near([lat,lng], distance) }
   scope :types, -> (type) { joins(:types).where(type.split(",").map { |x| "types.name = '#{x}' OR"}.join(" ")[0..-4])}
-  pg_search_scope :find_by_city_or_country, against: [:city, :country]
-
 
   def self.set_city_and_country
     Place.all.each do |place|

@@ -11,7 +11,6 @@ Rails.application.routes.draw do
       get 'places/friends', to: 'places#filter_by_friends'
       get 'places/types', to: 'places#filter_by_types'
       post 'places/image', to: 'places#images'
-      get 'places/search', to: 'places#filter_by_city_or_country'
       resources :users
       resources :places
 

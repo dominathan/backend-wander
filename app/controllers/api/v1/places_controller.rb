@@ -41,16 +41,6 @@ class Api::V1::PlacesController < ApplicationController
     render json: @user_object, status: 200
   end
 
-  def filter_by_city_or_country
-    places = Place.find_by_city_or_country(params['city_or_country'])
-    if places
-      @places = places.map { |place| place.attributes.merge({favorites_count: place.favorites.count, feed: Comment.where(place_id: place.id).order('created_at DESC').limit(10)}) }.sort_by { |place| place[:favorites_count] }.reverse!
-      render json: @places, status: 200
-    else
-      render status: 404
-    end
-  end
-
   def create
     @place = Place.find_or_initialize_by(google_id: place_params[:google_id])
     if !@place.persisted?

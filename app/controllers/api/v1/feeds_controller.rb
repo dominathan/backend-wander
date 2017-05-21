@@ -2,10 +2,14 @@ class Api::V1::FeedsController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    # lat, lng, distance = params[:lat], params[:lng], params[:distance]
-    # place = Place.nearby(lat,lng,distance)
-    # place_ids = place.map { |place| place.id }
-    @comments = Comment.includes(:user, :place).order('created_at DESC').limit(100)
+    if params[:lat] && params[:lng]
+      lat, lng, distance = params[:lat], params[:lng], params[:distance]
+      places = Place.nearby(lat,lng,distance)
+      place_ids = places.map { |place| place.id }
+      @comments = Comment.includes(:user, :place).where(place_id: place_ids).order('created_at DESC').limit(100)
+    else
+      @comments = Comment.includes(:user, :place).order('created_at DESC').limit(100)
+    end
     likes = Like.where(friend_id: @current_user.id).map(&:place_id)
     user_places = @current_user.places.map(&:id)
     @comments = @comments.map do |comment|
