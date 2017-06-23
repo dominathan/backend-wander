@@ -4,7 +4,7 @@ class ApplicationController < ActionController::API
     options = { algorithm: 'HS256', iss: ENV['AUTH0_DOMAIN'] }
     bearer = request.headers['HTTP_AUTHORIZATION'].try(:slice,7..-1)
     payload, header = JWT.decode(bearer, ENV['AUTH0_CLIENT_SECRET'], true, options)
-    @current_user ||= User.find_by(email: payload['email'])
+    @current_user = User.find_by(email: payload['email'])
   rescue JWT::ExpiredSignature
     render json: { status: 403, errors: ['The token has expired.'] }
   rescue JWT::DecodeError
